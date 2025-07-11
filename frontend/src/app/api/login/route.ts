@@ -4,10 +4,11 @@ import { getIronSession } from 'iron-session';
 import { sessionOptions } from '@/lib/session';
 import { SessionData } from '@/types';
 
-const PYTHON_API_URL = process.env.PYTHON_API_URL || 'http://localhost:8000';
 
 // Store tokens in memory (in production, use Redis)
-export const userTokens = new Map<string, string>();
+import { userTokens } from '@/lib/token-store';
+
+const PYTHON_API_URL = process.env.PYTHON_API_URL || 'http://localhost:8000';
 
 export async function POST(request: NextRequest) {
   try {

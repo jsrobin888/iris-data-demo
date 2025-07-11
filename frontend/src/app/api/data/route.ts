@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getIronSession } from 'iron-session';
 import { sessionOptions } from '@/lib/session';
 import { SessionData, IrisData } from '@/types';
-import { userTokens } from '../login/route';
+import { userTokens } from '@/lib/token-store';
 
 const PYTHON_API_URL = process.env.PYTHON_API_URL || 'http://localhost:8000';
 const PYTHON_API_KEY = process.env.PYTHON_API_KEY || '';

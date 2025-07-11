@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getIronSession } from 'iron-session';
 import { sessionOptions } from '@/lib/session';
 import { SessionData } from '@/types';
-import { userTokens } from '../login/route';
+import { userTokens } from '@/lib/token-store';
 
 export async function POST(request: NextRequest) {
   const response = NextResponse.json({ success: true });
