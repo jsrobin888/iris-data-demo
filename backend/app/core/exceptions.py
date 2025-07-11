@@ -23,6 +23,11 @@ class AuthenticationError(IrisAPIException):
     pass
 
 
+class AuthorizationError(IrisAPIException):
+    """Raised when user lacks required permissions"""
+    pass
+
+
 class ValidationError(IrisAPIException):
     """Raised when data validation fails"""
     pass
@@ -30,4 +35,19 @@ class ValidationError(IrisAPIException):
 
 class ConfigurationError(IrisAPIException):
     """Raised when configuration is invalid"""
+    pass
+
+
+class RateLimitError(IrisAPIException):
+    """Raised when rate limit is exceeded"""
+    pass
+
+
+class TokenError(IrisAPIException):
+    """Raised when token operations fail"""
+    pass
+
+
+class DataProcessingError(IrisAPIException):
+    """Raised when data processing fails"""
     pass

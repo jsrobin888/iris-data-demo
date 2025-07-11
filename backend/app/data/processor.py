@@ -27,15 +27,22 @@ class IrisDataProcessor:
         Returns:
             IrisDataResponse object
         """
-        # Extract column data as lists
+        # Convert DataFrame rows to list of dictionaries
+        data_points = []
+        for _, row in df.iterrows():
+            data_points.append({
+                'sepal_length': float(row['sepal_length']),
+                'sepal_width': float(row['sepal_width']),
+                'petal_length': float(row['petal_length']),
+                'petal_width': float(row['petal_width']),
+                'species': species 
+            })
+        
         response_data = {
-            'sepal_length': df['sepal_length'].tolist(),
-            'sepal_width': df['sepal_width'].tolist(),
-            'petal_length': df['petal_length'].tolist(),
-            'petal_width': df['petal_width'].tolist(),
             'species': species,
-            'count': len(df),
+            'data': data_points,
             'metadata': {
+                'count': len(df),
                 'min_values': {
                     'sepal_length': float(df['sepal_length'].min()),
                     'sepal_width': float(df['sepal_width'].min()),
@@ -50,9 +57,9 @@ class IrisDataProcessor:
                 }
             }
         }
-        
-        return IrisDataResponse(**response_data)
     
+        return IrisDataResponse(**response_data)
+
     @staticmethod
     def calculate_statistics(df: pd.DataFrame, species: str) -> DataStatistics:
         """
