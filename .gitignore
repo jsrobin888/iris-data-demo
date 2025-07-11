@@ -1,0 +1,54 @@
+*workspace
+*node_modules
+*.log
+*.env
+*.env.local
+
+# Build output
+/dist
+/.next
+/.nuxt
+/.cache
+
+# Dependency directories
+/bower_components
+/jspm_packages
+
+# Testing
+/coverage
+/junit.xml
+/nyc_output
+
+# Production
+/build
+/dist
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Logs
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Docker
+docker-compose.override.yml
+docker-compose.prod.yml
