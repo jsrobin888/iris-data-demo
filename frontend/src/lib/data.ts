@@ -38,6 +38,7 @@ const sampleData = {
   ]
 };
 
+// Legacy function - now data is fetched from Python API
 export function getIrisData(species: 'setosa' | 'virginica') {
   try {
     // Try to read from CSV file first

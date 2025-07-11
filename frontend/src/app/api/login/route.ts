@@ -1,32 +1,52 @@
+// app/api/login/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getIronSession } from 'iron-session';
 import { sessionOptions } from '@/lib/session';
-import { validateUser } from '@/lib/auth';
 import { SessionData } from '@/types';
+
+const PYTHON_API_URL = process.env.PYTHON_API_URL || 'http://localhost:8000';
+
+// Store tokens in memory (in production, use Redis)
+export const userTokens = new Map<string, string>();
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { email, password } = body;
 
-    const user = validateUser(email, password);
+    // Call Python API instead of local validation
+    const authResponse = await fetch(`${PYTHON_API_URL}/api/v1/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
     
-    if (!user) {
+    if (!authResponse.ok) {
+      const error = await authResponse.json();
       return NextResponse.json(
-        { success: false, error: 'Invalid credentials' },
-        { status: 401 }
+        { success: false, error: error.detail || 'Invalid credentials' },
+        { status: authResponse.status }
       );
     }
 
+    const authData = await authResponse.json();
+    
+    // Store the JWT token for later use
+    userTokens.set(email, authData.access_token);
+
+    console.log('User authenticated:', userTokens);
+
     const response = NextResponse.json({
       success: true,
-      user: user.email,
-      access: user.access
+      user: email,
+      access: authData.access_level as 'setosa' | 'virginica'
     });
 
     const session = await getIronSession<SessionData>(request, response, sessionOptions);
-    session.user = user.email;
-    session.access = user.access;
+    session.user = email;
+    session.access = authData.access_level as 'setosa' | 'virginica';
     await session.save();
 
     return response;
