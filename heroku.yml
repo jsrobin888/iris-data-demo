@@ -1,0 +1,18 @@
+build:
+  docker:
+    web: ./Dockerfile          # single image that bundles everything
+
+run:
+  web: |
+    trap '' SIGTERM;                                \
+    # 1) patch port into nginx
+    sed -i -e 's/@PORT/'"$PORT"'/g' /etc/nginx/conf.d/default.conf && \
+    nginx -g "daemon off;" &                       \
+    # 2) start Next.js
+    cd /frontend && npm run build && npm start &   \
+    # 3) start FastAPI (Gunicorn+Uvicorn)
+    cd /backend && gunicorn app.main:app \
+        -k uvicorn.workers.UvicornWorker \
+        --bind 0.0.0.0:8000 &                       \
+    # 4) wait / propagate failures
+    wait -n; kill -SIGTERM -$$; wait
